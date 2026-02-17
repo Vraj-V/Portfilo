@@ -4,8 +4,8 @@ import PlaneScene from '../assets/3d/plane.glb'
 const Plane = ({isRotating, ...props}) => {
 
     const ref = useRef();
-    const {scene,animation} =useGLTF(PlaneScene);
-    const {actions} = useAnimations(animation,ref);
+    const {scene, animations} =useGLTF(PlaneScene);
+    const {actions} = useAnimations(animations,ref);
 
     useEffect(()=>{
         if(isRotating){
