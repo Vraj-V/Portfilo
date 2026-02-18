@@ -24,6 +24,16 @@ const Home = () => {
     const [currentStage,setCurrentStage] = useState(1);
     const [isSoundOn, setIsSoundOn] = useState(true);
     const [modelsLoaded, setModelsLoaded] = useState(false);
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+    const [show,setShow] = useState(true); 
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     useEffect(() => {
         if(isSoundOn){
@@ -62,6 +72,10 @@ const adjustPlaneForScreenSize =()=>{
     return [screenScale,screenPosition];
 }
 
+setTimeout(() => { 
+    setShow(false);
+}, 3000);
+
 const [isLandScale,isLandPosition,isLandRotation] = adjustIslandForScreenSize();
 const [planeScale, planePosition] = adjustPlaneForScreenSize();
 
@@ -69,6 +83,11 @@ const [planeScale, planePosition] = adjustPlaneForScreenSize();
     <section className=" w-full h-screen relative">
 <div className="absolute top-28 left-0 right-0 z-10 flex items-center justify-center">
     {currentStage && <HomeInfo currentStage={currentStage} />}
+</div>
+<div className="absolute top-12 left-0 right-0 z-10 flex items-center justify-center pointer-events-none">
+    {show && <div className="bg-black bg-opacity-50 text-white px-4 py-2 rounded-lg text-sm md:text-base">
+        {isMobile ? "👆 Swipe to rotate (360 view)" : "🖱️  Grab & drag to rotate or use Arrow Keys"}
+    </div>}
 </div>
     <Canvas className={`w-full h-screen bg-transparent ${isRotating ? 'cursor-grabbing' : 'cursor-grab'}`}
     camera={{near:0.1, far:1000}}
@@ -81,7 +100,7 @@ const [planeScale, planePosition] = adjustPlaneForScreenSize();
             
             {modelsLoaded && <Bird />}
             <Sky isRotating={isRotating} />
-            <Island rotation={isLandRotation}  position={isLandPosition} scale={isLandScale} isRotating={isRotating} setIsRotating={setIsRotating} currentStage={currentStage} setCurrentStage={setCurrentStage}   />
+            <Island rotation={isLandRotation}  position={isLandPosition} scale={isLandScale} isRotating={isRotating} setIsRotating={setIsRotating} currentStage={currentStage} setCurrentStage={setCurrentStage} isMobile={isMobile}  />
             
             
             {modelsLoaded && <Plane isRotating={isRotating}

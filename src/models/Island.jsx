@@ -21,6 +21,7 @@ export function Island({
   setIsRotating,
   setCurrentStage,
   currentFocusPoint,
+  isMobile,
   ...props
 }) {
   const islandRef = useRef();
@@ -67,16 +68,19 @@ export function Island({
       // relative to the viewport's width
       const delta = (clientX - lastX.current) / viewport.width;
 
+      // Reduce sensitivity on mobile to improve performance
+      const sensitivityMultiplier = isMobile ? 0.006 : 0.01;
+
       // Update the island's rotation based on the mouse/touch movement
-      islandRef.current.rotation.y += delta * 0.01 * Math.PI;
+      islandRef.current.rotation.y += delta * sensitivityMultiplier * Math.PI;
 
       // Update the reference for the last clientX position
       lastX.current = clientX;
 
       // Update the rotation speed
-      rotationSpeed.current = delta * 0.01 * Math.PI;
+      rotationSpeed.current = delta * sensitivityMultiplier * Math.PI;
     }
-  }, [isRotating, viewport]);
+  }, [isRotating, viewport, isMobile]);
 
   // Handle keydown events
   const handleKeyDown = useCallback((event) => {
