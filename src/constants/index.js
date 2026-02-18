@@ -194,7 +194,7 @@ export const projects = [
         iconUrl: summiz,
         theme: 'btn-back-yellow',
         name: 'Drive AI Summarizer Application',
-        description: 'App that leverages AI to automatically generate concise & informative summaries from img or pdf.',
+        description: 'App that leverages AI to automatically generate concise & informative summaries from img or pdf. Ideal for students, professionals, and anyone seeking quick insights from lengthy documents.',
         link: 'https://github.com/Vraj-V/Drive-Backend--WithSupabase',
     }
 ];
