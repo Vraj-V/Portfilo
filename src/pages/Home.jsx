@@ -1,4 +1,4 @@
-import React,{Suspense,useState,useEffect,useRef} from 'react'
+import React,{Suspense,useState,useEffect,useRef, lazy} from 'react'
 {/* <div className="absolute top-28 left-0 right-0 z-10 flex items-center justify-center">
     POPUP
 </div> */}
@@ -6,11 +6,14 @@ import {Canvas} from '@react-three/fiber'
 import Loader from '../components/Loader'
 import { Island } from '../models/Island'
 import Sky from '../models/Sky'
-import Bird from '../models/Bird'
-import  Plane  from '../models/Plane'
 import HomeInfo from '../components/HomeInfo'
 import sakura from '../assets/sakura.mp3'
 import { soundoff, soundon } from '../assets/icons'
+
+// Lazy load non-critical 3D models
+const Bird = lazy(() => import('../models/Bird'))
+const Plane = lazy(() => import('../models/Plane'))
+
 const Home = () => {
 
     const audioRef = useRef(new Audio(sakura));
@@ -20,6 +23,7 @@ const Home = () => {
     const [isRotating, setIsRotating] = useState(true);
     const [currentStage,setCurrentStage] = useState(1);
     const [isSoundOn, setIsSoundOn] = useState(true);
+    const [modelsLoaded, setModelsLoaded] = useState(false);
 
     useEffect(() => {
         if(isSoundOn){
@@ -68,21 +72,22 @@ const [planeScale, planePosition] = adjustPlaneForScreenSize();
 </div>
     <Canvas className={`w-full h-screen bg-transparent ${isRotating ? 'cursor-grabbing' : 'cursor-grab'}`}
     camera={{near:0.1, far:1000}}
+    onCreated={() => setModelsLoaded(true)}
     >
         <Suspense fallback={<Loader />}>
             <directionalLight position={[1,1,1]} intensity={2}/>
             <ambientLight intensity={0.5}/>
             <hemisphereLight skyColor='#b1eff' groundColor='#000000' intensity={1}/>
             
-            <Bird />
+            {modelsLoaded && <Bird />}
             <Sky isRotating={isRotating} />
             <Island rotation={isLandRotation}  position={isLandPosition} scale={isLandScale} isRotating={isRotating} setIsRotating={setIsRotating} currentStage={currentStage} setCurrentStage={setCurrentStage}   />
             
             
-            <Plane isRotating={isRotating}
+            {modelsLoaded && <Plane isRotating={isRotating}
             scale={planeScale} 
             position={planePosition}  
-            rotation={[0,20,0]} />
+            rotation={[0,20,0]} />}
         
         
         
