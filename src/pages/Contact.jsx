@@ -17,9 +17,31 @@ const Contact = () => {
     setIsLoading(true);
     console.log(formData);
 
-    emailjs.sendForm('service_opnckif', 
-      'template_9maa6ip', 
-      formRef.current, 'user_2XoLZt3mKzqj8aGQy7b2')
+    emailjs.send(
+      import.meta.env.VITE_APP_EMAILJS_SERVICE_ID,
+      import.meta.env.VITE_APP_EMAILJS_TEMPLATE_ID,
+      {
+        from_name: formData.name,
+        to_name: "Vraj",
+        from_email: formData.email,
+        to_email: "vvaland6928@gmail.com",
+        message: formData.message
+      },
+      import.meta.env.VITE_APP_EMAILJS_PUBLIC_KEY
+    ).then((result) => {      
+      console.log(result.text);
+      setIsLoading(false);
+      // alert("Message sent successfully!");
+      setFormData({
+        name: '',
+        email: '',
+        message: ''
+      });
+    }).catch((error) => {
+      console.log(error.text);
+      setIsLoading(false);
+      // alert("Failed to send message. Please try again later.");
+    });
   }
 
   const handleChange = (e) => {
