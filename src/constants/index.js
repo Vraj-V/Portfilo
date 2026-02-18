@@ -167,7 +167,7 @@ export const projects = [
         theme: 'btn-back-red',
         name: 'Expense Tracker',
         description: 'Developed a web application that tracks and notifies about there expenses. User are able to set budgets and get insights on their spending habits. For now user has put their expenses manually but in future we are planning to integrate it with bank accounts for automatic tracking and with AI Agent to track the purchase and there catergioes',
-        link: '',
+        link: 'Planning',
     },
     {
         iconUrl: threads,
